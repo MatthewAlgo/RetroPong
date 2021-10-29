@@ -1,6 +1,6 @@
 import random
 import mainWindow
-import main
+import retropong
 
 class randomBallEngine():
     speedx = 0
@@ -15,20 +15,20 @@ class randomBallEngine():
     def Logic(self):
         if self.vectorx <= 0 and self.vectory <= 0:
             # 3rd quadrant
-            randomBallEngine.speedx = -main.BALLSPEED
-            randomBallEngine.speedy = random.randrange(int(-100*main.BALLSPEED),0,1) / 100
+            randomBallEngine.speedx = -retropong.BALLSPEED
+            randomBallEngine.speedy = random.randrange(int(-100*retropong.BALLSPEED),0,1) / 100
         if self.vectorx > 0 and self.vectory <= 0:
             # 4th quadrant
-            randomBallEngine.speedx = +main.BALLSPEED
-            randomBallEngine.speedy = random.randrange(int(-100*main.BALLSPEED),0,1) / 100
+            randomBallEngine.speedx = +retropong.BALLSPEED
+            randomBallEngine.speedy = random.randrange(int(-100*retropong.BALLSPEED),0,1) / 100
         if self.vectorx <= 0 and self.vectory > 0:
             # 2nd quadrant
-            randomBallEngine.speedx = -main.BALLSPEED
-            randomBallEngine.speedy = random.randrange(0,int(+100*main.BALLSPEED),1) / 100
+            randomBallEngine.speedx = -retropong.BALLSPEED
+            randomBallEngine.speedy = random.randrange(0,int(+100*retropong.BALLSPEED),1) / 100
         if self.vectorx > 0 and self.vectory > 0:
             # 3rd quadrant
-            randomBallEngine.speedx = +main.BALLSPEED
-            randomBallEngine.speedy = random.randrange(0,int(+100*main.BALLSPEED),1) / 100
+            randomBallEngine.speedx = +retropong.BALLSPEED
+            randomBallEngine.speedy = random.randrange(0,int(+100*retropong.BALLSPEED),1) / 100
 
 
 

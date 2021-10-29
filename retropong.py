@@ -1,9 +1,3 @@
-# This is a sample Python script.
-
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-# Press the green button in the gutter to run the script.
-
 import threading
 
 import pygame
@@ -30,7 +24,7 @@ TIME_SINCE_GAME_START = time.time()
 
 if __name__ == '__main__':
     pygame.init()
-    soundObj = pygame.mixer.Sound('ResourcesInUse/GameStart.wav')
+    soundObj = pygame.mixer.Sound(os.path.abspath('ResourcesInUse/GameStart.wav'))
     soundObj.play()
     TIME_SINCE_GAME_START = time.time()
 
@@ -45,14 +39,17 @@ if __name__ == '__main__':
 
     main = mainWindow.mainWindow(bar1, bar2, ball)
     main.createOne()
+    # Start the window thread inside the main thread -> The app is single-threaded for now
+    main.mainWindowLoop(PVP_CONTROL).start()
 
-    x = threading.Thread(target=main.mainWindowLoop, args=(PVP_CONTROL,))
-    threads.append(x)
+    # Multi threading support
+    # x = threading.Thread(target=mainWindow.mainWindow.mainWindowLoop, args=(PVP_CONTROL,))
+    # threads.append(x)
 
     # Start only the window thread - Cython blocks concurrency
-    threads[0].start()
+    # threads[0].start()
 
-
+    print("Game End\nHope you enjoy the game. Please check my github page: github.com/MatthewAlgo")
     # End
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/

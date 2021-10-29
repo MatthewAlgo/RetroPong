@@ -4,11 +4,12 @@ import threading
 import bar
 import ball
 import random, os, pygame
-import main
+import retropong
 import randomball
 
 timethen = time.time()
 timenow = time.time()
+
 
 class mainWindow():
     screenwidth = 620
@@ -36,7 +37,7 @@ class mainWindow():
         self.textRect.center = (mainWindow.screenwidth // 2, mainWindow.screenheight // 2)
 
     def createOne(self):
-        PG.display.set_caption('PONG - Made By MatthewAlgo')
+        PG.display.set_caption('RetroPong - Made By MatthewAlgo')
         self.screen.fill(self.background_colour)
 
     def mainWindowLoop(self, PVP_CONTROL):
@@ -47,23 +48,22 @@ class mainWindow():
         self.Intermediary_Selection_Screen()
 
         # Load initial file
-        if main.MUSIC_ON:
+        if retropong.MUSIC_ON:
             random_file = random.choice(os.listdir("WAVSelectorDirectory"))
             soundObj = pygame.mixer.Sound(f"WAVSelectorDirectory/{random_file}")
             print(f"Loaded WAVSelectorDirectory/{random_file}")
             soundObj.play()
 
-
         while running:
             # Check for background music
             timenow = time.time()
-            if timenow - main.TIME_SINCE_GAME_START > 10:  # Change ball speed first of all
-                main.TIME_SINCE_GAME_START+=10
-                main.BALLSPEED+=0.1
-                if main.SOUND_ON:
+            if timenow - retropong.TIME_SINCE_GAME_START > 10:  # Change ball speed first of all
+                retropong.TIME_SINCE_GAME_START += 10
+                retropong.BALLSPEED += 0.1
+                if retropong.SOUND_ON:
                     sob = pygame.mixer.Sound('ResourcesInUse/LevelUp.wav')
                     sob.play()
-            if main.MUSIC_ON:
+            if retropong.MUSIC_ON:
                 if timenow - timethen > soundObj.get_length():  # The current music is finished
                     random_file = random.choice(os.listdir("WAVSelectorDirectory"))
                     soundObj = pygame.mixer.Sound(f"WAVSelectorDirectory/{random_file}")
@@ -73,7 +73,7 @@ class mainWindow():
 
             keys = PG.key.get_pressed()  # checking pressed keys
 
-            if main.PVP_CONTROL:
+            if retropong.PVP_CONTROL:
                 if keys[PG.K_UP]:
                     self.bar2.moveUp()
                 if keys[PG.K_DOWN]:
@@ -82,29 +82,29 @@ class mainWindow():
                     self.bar1.moveUp()
                 if keys[PG.K_s]:
                     self.bar1.moveDown()
-            elif not main.COMPUTERONLYCONTROL:
+            elif not retropong.COMPUTERONLYCONTROL:
                 if keys[PG.K_w]:
                     self.bar1.moveUp()
                 if keys[PG.K_s]:
                     self.bar1.moveDown()
-                if self.ball.getPosition()[1] < self.bar2.getPosition()[1]+self.bar2.getSize()[1]/2:
+                if self.ball.getPosition()[1] < self.bar2.getPosition()[1] + self.bar2.getSize()[1] / 2:
                     self.bar2.moveUp()
-                if self.ball.getPosition()[1] > self.bar2.getPosition()[1]+self.bar2.getSize()[1]/2:
+                if self.ball.getPosition()[1] > self.bar2.getPosition()[1] + self.bar2.getSize()[1] / 2:
                     self.bar2.moveDown()
             else:
-                if self.ball.getPosition()[1] < self.bar1.getPosition()[1]+self.bar1.getSize()[1]/2:
+                if self.ball.getPosition()[1] < self.bar1.getPosition()[1] + self.bar1.getSize()[1] / 2:
                     self.bar1.moveUp()
-                if self.ball.getPosition()[1] > self.bar1.getPosition()[1]+self.bar1.getSize()[1]/2:
+                if self.ball.getPosition()[1] > self.bar1.getPosition()[1] + self.bar1.getSize()[1] / 2:
                     self.bar1.moveDown()
                 if self.ball.getPosition()[1] < self.bar2.getPosition()[1] + self.bar2.getSize()[1] / 2:
                     self.bar2.moveUp()
                 if self.ball.getPosition()[1] > self.bar2.getPosition()[1] + self.bar2.getSize()[1] / 2:
                     self.bar2.moveDown()
 
-
             for event in PG.event.get():
                 if event.type == PG.QUIT:
                     running = False
+                    print("Game End\nHope you enjoy the game. Please check my github page: github.com/MatthewAlgo")
                     exit()
                 if event.type == PG.WINDOWRESIZED:
                     pass
@@ -114,7 +114,9 @@ class mainWindow():
             # Draw the text inside the rectangle
             self.screen.blit(self.text, self.textRect)
 
-            self.textscore = self.fontscore.render(f'Player1: {mainWindow.ScorePlayer1} # Player2: {mainWindow.ScorePlayer2}', True, (0, 255, 0), (0, 0, 255))
+            self.textscore = self.fontscore.render(
+                f'Player1: {mainWindow.ScorePlayer1} # Player2: {mainWindow.ScorePlayer2}', True, (0, 255, 0),
+                (0, 0, 255))
             self.textRectscore = self.textscore.get_rect()
             self.textRectscore.center = (mainWindow.screenwidth // 2, mainWindow.screenheight // 5)
 
@@ -127,13 +129,14 @@ class mainWindow():
                 running = False
                 break
 
-
             self.screen.blit(self.textscore, self.textRectscore)
 
             PG.draw.rect(self.screen, (255, 0, 0), (
-            self.bar1.getPosition()[0], self.bar1.getPosition()[1], self.bar1.getSize()[0], self.bar1.getSize()[1]), 2)
+                self.bar1.getPosition()[0], self.bar1.getPosition()[1], self.bar1.getSize()[0], self.bar1.getSize()[1]),
+                         2)
             PG.draw.rect(self.screen, (255, 0, 0), (
-            self.bar2.getPosition()[0], self.bar2.getPosition()[1], self.bar2.getSize()[0], self.bar2.getSize()[1]), 2)
+                self.bar2.getPosition()[0], self.bar2.getPosition()[1], self.bar2.getSize()[0], self.bar2.getSize()[1]),
+                         2)
 
             self.ball.moveaccordingtoEngine()
             self.ball.updatepositionAccordingtohits(self.bar1, self.bar2)
@@ -147,58 +150,59 @@ class mainWindow():
     def Intermediary_Selection_Screen(self):
         running = True
         SELECTION = 1
-        if main.MUSIC_ON:
+        if retropong.MUSIC_ON:
             random_file = random.choice(os.listdir("WAVSelectorDirectory"))
             soundObj = pygame.mixer.Sound(f"WAVSelectorDirectory/{random_file}")
             print(f"Loaded WAVSelectorDirectory/{random_file}")
             soundObj.play()
+
         while running:
             for event in PG.event.get():
                 if event.type == PG.QUIT:
                     running = False
+                    print("Game End\nHope you enjoy the game. Please check my github page: github.com/MatthewAlgo")
                     exit()
                 if event.type == PG.WINDOWRESIZED:
                     pass
                 if event.type == pygame.KEYDOWN:
-                    if main.SOUND_ON:
+                    if retropong.SOUND_ON:
                         sob = pygame.mixer.Sound('ResourcesInUse/ItemChanged.wav')
                         sob.play()
                     if event.key == pygame.K_UP:
                         if SELECTION > 1:
-                            SELECTION-=1
+                            SELECTION -= 1
                     if event.key == pygame.K_DOWN:
                         if SELECTION < 5:
-                            SELECTION+=1
+                            SELECTION += 1
                     if event.key == pygame.K_RETURN:
                         if SELECTION == 1:
-                            main.PVP_CONTROL = True
-                            main.COMPUTERONLYCONTROL = False
+                            retropong.PVP_CONTROL = True
+                            retropong.COMPUTERONLYCONTROL = False
                         if SELECTION == 2:
-                            main.PVP_CONTROL = False
-                            main.COMPUTERONLYCONTROL = False
+                            retropong.PVP_CONTROL = False
+                            retropong.COMPUTERONLYCONTROL = False
                         if SELECTION == 3:
-                            main.PVP_CONTROL = False
-                            main.COMPUTERONLYCONTROL = True
+                            retropong.PVP_CONTROL = False
+                            retropong.COMPUTERONLYCONTROL = True
                         if SELECTION == 4:
-                            if main.MUSIC_ON == True:
-                                main.MUSIC_ON = False
+                            if retropong.MUSIC_ON == True:
+                                retropong.MUSIC_ON = False
                                 soundObj.stop()
                             else:
-                                main.MUSIC_ON = True
+                                retropong.MUSIC_ON = True
                                 random_file = random.choice(os.listdir("WAVSelectorDirectory"))
                                 soundObj = pygame.mixer.Sound(f"WAVSelectorDirectory/{random_file}")
                                 print(f"Loaded WAVSelectorDirectory/{random_file}")
                                 soundObj.play()
                         if SELECTION == 5:
-                            if main.SOUND_ON == True:
-                                main.SOUND_ON = False
+                            if retropong.SOUND_ON == True:
+                                retropong.SOUND_ON = False
                             else:
-                                main.SOUND_ON = True
+                                retropong.SOUND_ON = True
                         if SELECTION != 4 and SELECTION != 5:
                             soundObj.stop()
                             running = False
                             break
-
 
             # Redraw frame window
             self.screen.fill((0, 0, 0))
@@ -210,7 +214,7 @@ class mainWindow():
             # Draw Entities -> Textboxes
             text = self.font.render('RetroPong - The Game', True, (0, 255, 0), (0, 0, 255))
             textRect = self.text.get_rect()
-            textRect.center = (mainWindow.screenwidth//3, mainWindow.screenheight // 8)
+            textRect.center = (mainWindow.screenwidth // 3, mainWindow.screenheight // 8)
             self.screen.blit(text, textRect)
 
             # First Menu Item
@@ -244,12 +248,12 @@ class mainWindow():
 
             # Music Toggle
             if SELECTION != 4:
-                if main.MUSIC_ON:
+                if retropong.MUSIC_ON:
                     text = self.fontscore.render('o Music Toggle', True, (0, 255, 0), (0, 0, 255))
                 else:
                     text = self.fontscore.render('Music Toggle', True, (0, 255, 0), (0, 0, 255))
             else:
-                if main.MUSIC_ON:
+                if retropong.MUSIC_ON:
                     text = self.fontscore.render('o Music Toggle', True, (0, 0, 255), (0, 255, 0))
                 else:
                     text = self.fontscore.render('Music Toggle', True, (0, 0, 255), (0, 255, 0))
@@ -260,12 +264,12 @@ class mainWindow():
 
             # Sound effects Toggle
             if SELECTION != 5:
-                if main.SOUND_ON:
+                if retropong.SOUND_ON:
                     text = self.fontscore.render('o Sound Toggle', True, (0, 255, 0), (0, 0, 255))
                 else:
                     text = self.fontscore.render('Sound Toggle', True, (0, 255, 0), (0, 0, 255))
             else:
-                if main.SOUND_ON:
+                if retropong.SOUND_ON:
                     text = self.fontscore.render('o Sound Toggle', True, (0, 0, 255), (0, 255, 0))
                 else:
                     text = self.fontscore.render('Sound Toggle', True, (0, 0, 255), (0, 255, 0))
@@ -274,17 +278,28 @@ class mainWindow():
             textRect.center = (mainWindow.screenwidth // 3, mainWindow.screenheight // 1.25)
             self.screen.blit(text, textRect)
 
-
             PG.display.flip()
+            PG.display.update()
+
     def DisplayWinnerPart(self):
         running = True
         while running:
             for event in PG.event.get():
                 if event.type == PG.QUIT:
                     running = False
+                    if mainWindow.ScorePlayer1 == 20:
+                        print(f"Player 1 has won the game")
+                    elif mainWindow.ScorePlayer2 == 20:
+                        print(f"Player 2 has won the game")
+                    print("Game End\nHope you enjoy the game. Please check my github page: github.com/MatthewAlgo")
                     exit()
                 if event.type == PG.KEYDOWN:
                     running = False
+                    if mainWindow.ScorePlayer1 == 20:
+                        print(f"Player 1 has won the game")
+                    elif mainWindow.ScorePlayer2 == 20:
+                        print(f"Player 2 has won the game")
+                    print("Game End\nHope you enjoy the game. Please check my github page: github.com/MatthewAlgo")
                     exit()
                     break
             self.screen.fill((0, 0, 0))
@@ -303,3 +318,7 @@ class mainWindow():
             textRect.center = (mainWindow.screenwidth // 3, mainWindow.screenheight // 2)
             self.screen.blit(text, textRect)
             PG.display.flip()
+        if mainWindow.ScorePlayer1 == 20:
+            print(f"Player 1 has won the game")
+        elif mainWindow.ScorePlayer2 == 20:
+            print(f"Player 2 has won the game")

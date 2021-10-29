@@ -2,7 +2,7 @@ import random
 import pygame as PG
 
 import bar
-import main
+import retropong
 import randomball
 import mainWindow
 import pygame
@@ -26,7 +26,7 @@ class ball(bar.bar):
         if self.getPosition()[1] >= height or self.getPosition()[1] <= 0:
             randomBallEngine.speedy = -randomBallEngine.speedy
             # Wall hit sound
-            if main.SOUND_ON:
+            if retropong.SOUND_ON:
                 soundObj = pygame.mixer.Sound('ResourcesInUse/WallHit.wav')
                 soundObj.play()
 
@@ -40,7 +40,7 @@ class ball(bar.bar):
                 mainWindow.ScorePlayer1 += 1
 
                 # Play Sound
-                if main.SOUND_ON:
+                if retropong.SOUND_ON:
                     soundObj = pygame.mixer.Sound('ResourcesInUse/Powerup.wav')
                     soundObj.play()
 
@@ -52,7 +52,7 @@ class ball(bar.bar):
                 mainWindow.ScorePlayer2 += 1
 
                 # Play Sound
-                if main.SOUND_ON:
+                if retropong.SOUND_ON:
                     soundObj = pygame.mixer.Sound('ResourcesInUse/Powerup.wav')
                     soundObj.play()
 
@@ -67,12 +67,12 @@ class ball(bar.bar):
         if bar1.getPosition()[1] <= self.getPosition()[1] <= bar1.getPosition()[1] + bar1.getSize()[1] and \
                 30 + bar1.getSize()[0]-20 <= self.getPosition()[0] <=30 + bar1.getSize()[0]:
             # Play sound
-            if main.SOUND_ON:
+            if retropong.SOUND_ON:
                 soundObj = pygame.mixer.Sound('ResourcesInUse/BoardHit.wav')
                 soundObj.play()
 
-            randomBallEngine.speedx = main.BALLSPEED
-            randomBallEngine.speedy = random.randrange(int(-100*main.BALLSPEED),int(+100*main.BALLSPEED),1) / 100
+            randomBallEngine.speedx = retropong.BALLSPEED
+            randomBallEngine.speedy = random.randrange(int(-100*retropong.BALLSPEED),int(+100*retropong.BALLSPEED),1) / 100
             # Then update the position
             self.position = [self.getPosition()[0] + randomball.randomBallEngine.speedx,
                              self.getPosition()[1] + randomball.randomBallEngine.speedy]
@@ -80,12 +80,12 @@ class ball(bar.bar):
         if bar2.getPosition()[1] <= self.getPosition()[1] <= bar2.getPosition()[1] + bar2.getSize()[1] and \
                 mainWindow.screenwidth - (30 + bar2.getSize()[0]) <= self.getPosition()[0] <= mainWindow.screenwidth - (30 + bar2.getSize()[0]) +20:
             # Play sound
-            if main.SOUND_ON:
+            if retropong.SOUND_ON:
                 soundObj = pygame.mixer.Sound('ResourcesInUse/BoardHit.wav')
                 soundObj.play()
 
             randomBallEngine.speedx = -randomBallEngine.speedx
-            randomBallEngine.speedy = random.randrange(int(-100*main.BALLSPEED),int(+100*main.BALLSPEED),1) / 100
+            randomBallEngine.speedy = random.randrange(int(-100*retropong.BALLSPEED),int(+100*retropong.BALLSPEED),1) / 100
             # Then update the position
             self.position = [self.getPosition()[0] + randomball.randomBallEngine.speedx,
                              self.getPosition()[1] + randomball.randomBallEngine.speedy]

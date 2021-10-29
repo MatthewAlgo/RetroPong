@@ -8,7 +8,7 @@ import concurrent.futures
 
 import pygame
 
-import main
+import retropong
 
 
 class WavPlayerRandom():
