@@ -24,17 +24,18 @@ TIME_SINCE_GAME_START = time.time()
 
 if __name__ == '__main__':
     pygame.init()
-    soundObj = pygame.mixer.Sound(os.path.abspath('ResourcesInUse/GameStart.wav'))
+    soundObj = pygame.mixer.Sound(
+        os.path.abspath('ResourcesInUse/GameStart.wav'))
     soundObj.play()
     TIME_SINCE_GAME_START = time.time()
-
 
     # Init the entities
 
     bar1 = bar.bar([30, 30], 620, 480, 30, 120)
     bar2 = bar.bar([620 - 60, 30], 620, 480, 30, 120)
 
-    ball = ball.ball([mainWindow.mainWindow.screenwidth / 2, mainWindow.mainWindow.screenheight / 2], 620, 480, 10, 0)
+    ball = ball.ball([mainWindow.mainWindow.screenwidth / 2,
+                     mainWindow.mainWindow.screenheight / 2], 620, 480, 10, 0)
     randomball.randomBallEngine(ball)
 
     main = mainWindow.mainWindow(bar1, bar2, ball)

@@ -15,19 +15,17 @@ class bar():
         # If Player VS Computer, adapt the speed
         if self.position[1] + self.height + 20 <= self.screenH and self.position[1] + 20 >= 0:
             if not (retropong.PVP_CONTROL == False and retropong.COMPUTERONLYCONTROL == False):
-                self.position[1] += 10
+                self.position[1] += 5
             else:
                 self.position[1] += 2.5
-
 
     def moveUp(self):
         # If Player VS Computer, adapt the speed
         if self.position[1] + self.height - 20 <= self.screenH and self.position[1] - 20 >= 0:
             if not (retropong.PVP_CONTROL == False and retropong.COMPUTERONLYCONTROL == False):
-                self.position[1] -= 10
+                self.position[1] -= 5
             else:
                 self.position[1] -= 2.5
-
 
     def getSize(self):
         return [self.width, self.height]
