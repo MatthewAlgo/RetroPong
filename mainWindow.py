@@ -46,7 +46,7 @@ class mainWindow():
         timethen = time.time()
 
         self.Intermediary_Selection_Screen()
-
+        TIME_SINCE_SELECTION = time.time()
         # Load initial file
         if retropong.MUSIC_ON:
             random_file = random.choice(os.listdir("WAVSelectorDirectory"))
@@ -57,8 +57,8 @@ class mainWindow():
         while running:
             # Check for background music
             timenow = time.time()
-            if timenow - retropong.TIME_SINCE_GAME_START > 10:  # Change ball speed first of all
-                retropong.TIME_SINCE_GAME_START += 10
+            if timenow - TIME_SINCE_SELECTION > 10:  # Change ball speed first of all
+                TIME_SINCE_SELECTION += 10
                 retropong.BALLSPEED += 0.1
                 if retropong.SOUND_ON:
                     sob = pygame.mixer.Sound('ResourcesInUse/LevelUp.wav')
@@ -150,6 +150,8 @@ class mainWindow():
     def Intermediary_Selection_Screen(self):
         running = True
         SELECTION = 1
+        localtimethen = time.time()
+        localtimenow = time.time()
         if retropong.MUSIC_ON:
             random_file = random.choice(os.listdir("WAVSelectorDirectory"))
             soundObj = pygame.mixer.Sound(f"WAVSelectorDirectory/{random_file}")
@@ -178,17 +180,36 @@ class mainWindow():
                         if SELECTION == 1:
                             retropong.PVP_CONTROL = True
                             retropong.COMPUTERONLYCONTROL = False
+                            try:
+                                soundobj.stop()
+                            except:
+                                pass
+
                         if SELECTION == 2:
                             retropong.PVP_CONTROL = False
                             retropong.COMPUTERONLYCONTROL = False
+                            try:
+                                soundobj.stop()
+                            except:
+                                pass
                         if SELECTION == 3:
                             retropong.PVP_CONTROL = False
                             retropong.COMPUTERONLYCONTROL = True
+                            try:
+                                soundobj.stop()
+                            except:
+                                pass
                         if SELECTION == 4:
                             if retropong.MUSIC_ON == True:
                                 retropong.MUSIC_ON = False
-                                soundObj.stop()
+                                try:
+                                    soundObj.stop()
+                                except:
+                                    pass
                             else:
+                                localtimethen = time.time()
+                                localtimenow = time.time()
+
                                 retropong.MUSIC_ON = True
                                 random_file = random.choice(os.listdir("WAVSelectorDirectory"))
                                 soundObj = pygame.mixer.Sound(f"WAVSelectorDirectory/{random_file}")
@@ -203,6 +224,15 @@ class mainWindow():
                             soundObj.stop()
                             running = False
                             break
+            if retropong.MUSIC_ON:
+                localtimenow = time.time()
+                if timenow - timethen > soundObj.get_length():  # The current music is finished
+
+                    random_file = random.choice(os.listdir("WAVSelectorDirectory"))
+                    soundObj = pygame.mixer.Sound(f"WAVSelectorDirectory/{random_file}")
+                    print(f"Loaded WAVSelectorDirectory/{random_file}")
+                    soundObj.play()
+
 
             # Redraw frame window
             self.screen.fill((0, 0, 0))
