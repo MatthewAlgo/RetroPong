@@ -118,7 +118,10 @@ class mainWindow():
                 if event.type == PG.KEYDOWN:
                     if event.key == PG.K_ESCAPE:
                         # RETURN TO MAIN MENU
-                        soundObj.stop()
+                        try:
+                            soundObj.stop()
+                        except:
+                            pass
                         mainWindow.ScorePlayer1 = 0
                         mainWindow.ScorePlayer2 = 0
                         retropong.BALLSPEED = 1
